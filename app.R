@@ -5,13 +5,11 @@ library(leaflet)
 library(vroom)
 library(DT)
 
-
 reactlog::reactlog_enable()
 
 source("load_vl_data.R")
 source("uiVars.R")       # the filter 'dictionary' which contains the variable uiVars
 source("filterModule.R") # filter module
-
 
 ui <-
   fluidPage(
@@ -24,8 +22,8 @@ ui <-
         tabsetPanel(type = "pills",
                     tabPanel("Map",
                              leafletOutput("map",
-                                           width = "100%",
-                                           height = 550)),
+                                           width = "125%",
+                                           height = 850)),
                     tabPanel("Data explorer",
                              DTOutput(outputId = "table"),
                              awesomeRadio("table_select",
@@ -38,7 +36,6 @@ ui <-
                     tabPanel("Timeline"))
         )
     ))
-
 
 server <- function(input, output, session) {
   
@@ -111,6 +108,7 @@ server <- function(input, output, session) {
                  layerId = ~ as.character(study_no),
                  color = "black",
                  weight = 1,
+                 #clusterOptions = markerClusterOptions(),
                  fillColor =   ~ status_pal(status),
                  fillOpacity = 1,
                  popup = ~popup) %>% 
@@ -118,7 +116,6 @@ server <- function(input, output, session) {
                 title = "Study status",
                 opacity = 0.9)
   })
-
 
   # remove markers from map (only runs when markers are removed)
   observe({
